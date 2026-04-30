@@ -1,0 +1,53 @@
+# Самонаполняющийся новостной сайт — Конфигурация Apache
+
+AddDefaultCharset UTF-8
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Запрет просмотра системных папок
+    RewriteRule ^data/ - [F,L]
+    RewriteRule ^cache/ - [F,L]
+
+    # Запрет прямого доступа к системным файлам
+    RewriteRule ^(config|functions)\.php$ - [F,L]
+    RewriteRule ^visitor\.php$ - [F,L]
+</IfModule>
+
+# Запрет листинга директорий
+Options -Indexes
+
+# Доступ к новостям (статические HTML)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^news/([a-z0-9\-]+)\.html$ news/$1.html [L]
+</IfModule>
+
+# Защита скрытых файлов
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Кеширование статики
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType text/css "access plus 1 week"
+    ExpiresByType text/html "access plus 1 hour"
+</IfModule>
+
+# Сжатие
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json text/xml
+</IfModule>
+
+# PHP
+<IfModule mod_php.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 10M
+</IfModule>
