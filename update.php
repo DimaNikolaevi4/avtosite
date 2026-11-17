@@ -6,18 +6,20 @@
  *
  *  Запуск:
  *    - Через cron:    php /путь/к/update.php
- *    - Через браузер: https://ваш-сайт.ru/update.php?key=update2025
+ *    - Через браузер: https://ваш-сайт.ru/update.php?key=КЛЮЧ (ключ — в config.local.php)
  *
  *  Cron на Beget (каждые 3 часа):
  *    0 */3 * * * /usr/bin/php /home/u/аккаунт/public_html/update.php
  */
 
-$isCli    = (php_sapi_name() === 'cli');
-$hasKey   = (isset($_GET['key']) && $_GET['key'] === 'update2025');
+$isCli = (php_sapi_name() === 'cli');
 
-if (!$isCli && !$hasKey) {
-    http_response_code(403);
-    die('Доступ запрещён');
+$cfg = require __DIR__ . '/config.php';
+define('CONFIG_LOADED', true);
+require __DIR__ . '/functions.php';
+
+if (!checkRunAccess()) {
+    exit;
 }
 
 @set_time_limit(300);
@@ -30,10 +32,6 @@ if (!$isCli) {
 }
 
 try {
-    $cfg = require __DIR__ . '/config.php';
-    define('CONFIG_LOADED', true);
-    require __DIR__ . '/functions.php';
-
     initDirectories();
 
     logMsg('=== НАЧАЛО СБОРА НОВОСТЕЙ ===');

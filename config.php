@@ -5,7 +5,7 @@
  * ============================================================
  */
 
-return [
+$config = [
     // --- Название сайта ---
     'site_name'        => 'АвтоНовости',
     'site_description' => 'Автоматический агрегатор новостей',
@@ -83,4 +83,18 @@ return [
 
     // --- Минимальная длина текста статьи (символов) ---
     'min_text_length'  => 200,
+
+    // --- Запуск сборщика ---
+    'update_key'      => '',    // ключ для запуска через браузер; задавать в config.local.php
+    'allow_web_run'   => false, // true — разрешить запуск update.php/run.php по ключу из браузера
 ];
+
+// Локальные переопределения (не коммитятся): config.local.php
+if (is_file(__DIR__ . '/config.local.php')) {
+    $local = require __DIR__ . '/config.local.php';
+    if (is_array($local)) {
+        $config = array_merge($config, $local);
+    }
+}
+
+return $config;

@@ -11,6 +11,8 @@ AddDefaultCharset UTF-8
 
     # Запрет прямого доступа к системным файлам
     RewriteRule ^(config|functions)\.php$ - [F,L]
+    RewriteRule ^config\.local\.php$ - [F,L]
+    RewriteRule ^tools/ - [F,L]
     RewriteRule ^visitor\.php$ - [F,L]
 </IfModule>
 

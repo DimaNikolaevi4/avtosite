@@ -2,7 +2,7 @@
 /**
  * СБОРЩИК НОВОСТЕЙ — полная версия
  *
- * Через браузер: открой файл напрямую (без ключа)
+ * Через браузер: только с ключом (?key=…, allow_web_run = true)
  * Через cron:     php /путь/к/run.php
  *
  * Cron на Beget (каждые 3 часа):
@@ -13,15 +13,19 @@
 @ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
+$cfg = require __DIR__ . '/config.php';
+define('CONFIG_LOADED', true);
+require __DIR__ . '/functions.php';
+
+if (!checkRunAccess()) {
+    exit;
+}
+
 header('Content-Type: text/plain; charset=utf-8');
 
 echo "=== ЗАПУСК СБОРЩИКА НОВОСТЕЙ ===\n\n";
 
 try {
-    $cfg = require __DIR__ . '/config.php';
-    define('CONFIG_LOADED', true);
-    require __DIR__ . '/functions.php';
-
     initDirectories();
 
     logMsg('=== НАЧАЛО СБОРА НОВОСТЕЙ ===');

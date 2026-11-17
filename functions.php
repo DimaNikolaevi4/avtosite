@@ -23,6 +23,32 @@ function initDirectories(): void
 }
 
 // ============================================================
+//  Доступ к запуску сборщика
+// ============================================================
+/**
+ * CLI — всегда можно; из браузера — только при allow_web_run и верном ключе.
+ */
+function checkRunAccess(): bool
+{
+    global $cfg;
+
+    if (PHP_SAPI === 'cli') {
+        return true;
+    }
+
+    $key = (string)($_GET['key'] ?? '');
+    if (!empty($cfg['allow_web_run']) && !empty($cfg['update_key']) && $key !== ''
+        && hash_equals((string)$cfg['update_key'], $key)) {
+        return true;
+    }
+
+    http_response_code(403);
+    header('Content-Type: text/plain; charset=utf-8');
+    echo "403 Forbidden\n";
+    return false;
+}
+
+// ============================================================
 //  Логирование
 // ============================================================
 function logMsg(string $message): void

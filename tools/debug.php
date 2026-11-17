@@ -1,6 +1,9 @@
 <?php
+// Служебный файл: только запуск из консоли (веб-доступ закрыт в .htaccess)
+if (PHP_SAPI !== 'cli') { http_response_code(403); exit("403 Forbidden\n"); }
+
 /**
- * Диагностика сервера — загружи в корень сайта и открой в браузере
+ * Диагностика сервера — только из консоли: php tools/debug.php
  */
 
 header('Content-Type: text/plain; charset=utf-8');

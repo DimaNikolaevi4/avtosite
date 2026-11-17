@@ -1,8 +1,11 @@
 <?php
+// Служебный файл: только запуск из консоли (веб-доступ закрыт в .htaccess)
+if (PHP_SAPI !== 'cli') { http_response_code(403); exit("403 Forbidden\n"); }
+
 /**
  * СБОРЩИК НОВОСТЕЙ — полная версия
  *
- * Через браузер: открой файл напрямую
+ * Только из консоли: php tools/test_fetch.php
  * Через cron:     php /путь/к/test_fetch.php
  */
 
@@ -18,9 +21,9 @@ header('Content-Type: text/plain; charset=utf-8');
 
 try {
 
-    $cfg = require __DIR__ . '/config.php';
+    $cfg = require __DIR__ . '/../config.php';
     define('CONFIG_LOADED', true);
-    require __DIR__ . '/functions.php';
+    require __DIR__ . '/../functions.php';
 
     initDirectories();
 
